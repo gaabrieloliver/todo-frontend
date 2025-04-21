@@ -62,6 +62,7 @@ const TodoList = () => {
         value={newTodo}
         onChange={(e) => setNewTodo(e.target.value)}
         placeholder="Adicione uma nova tarefa"
+        
       />
       <button onClick={addTodo}>Add</button>
 

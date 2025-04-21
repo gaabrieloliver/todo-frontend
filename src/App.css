@@ -1,11 +1,10 @@
 /* src/App.css */
 body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     font-family: Arial, sans-serif;
     background-color: #0d0c0c;
     color: white;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,24 +16,30 @@ h1 {
 }
 
 h1 span {
-    color:#007bff
+    color: #007bff;
 }
+
 .app-wrapper {
     display: flex;
     justify-content: center;
+    width: 100%;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .todo-container {
     width: 100%;
     max-width: 500px;
-    background-color: white;
+    background-color: #272424;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 .todo-container h1 {
+    color: white;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -43,14 +48,18 @@ h1 span {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
-} 
+    width: 100%;
+}
 
 input[type="text"] {
     flex: 1;
+    width: 100%;
     padding: 9px;
-    margin-right: 1rem;
     font-size: 16px;
     border-radius: 6px;
+    border: none;
+    margin-bottom: 1rem;
+    
 }
 
 button {
@@ -60,6 +69,7 @@ button {
     border: none;
     cursor: pointer;
     border-radius: 6px;
+    white-space: nowrap;
 }
 
 button:hover {
@@ -70,25 +80,49 @@ ul {
     margin-top: 1rem;
     list-style: none;
     padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 li {
     background: #272424;
     padding: 10px;
-    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 6px;
+    width: 100%;
 }
 
-li div button {
+li .todo-text {
+    flex: 1;
+    word-break: break-word;
+}
+
+li .todo-actions {
+    display: flex;
+    gap: 5px;
+}
+
+li .todo-actions button {
     margin-left: 5px;
 }
 
+/* Media queries para responsividade */
 @media (max-width: 600px) {
+    body, ul, li {
+        text-align: center;
+    }
+
+    .app-wrapper {
+        padding: 10px;
+    }
+
     .todo-container {
         padding: 20px;
+        max-width: 100%;
     }
 
     .input-group {
@@ -97,5 +131,21 @@ li div button {
 
     button {
         width: 100%;
+    }
+
+    li {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    li .todo-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    li .todo-actions button {
+        flex: 1;
+        margin-left: 0;
     }
 }
