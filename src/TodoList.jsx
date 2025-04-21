@@ -1,71 +1,91 @@
-// src/TodoList.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function TodoList() {
+const TodoList = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
-  const [editIndex, setEditIndex] = useState(null);
-  const [editedTodo, setEditedTodo] = useState("");
+  const [editingTodo, setEditingTodo] = useState(null);
 
-  const addTodo = () => {
-    if (newTodo.trim() !== "") {
-      setTodos([...todos, newTodo]);
-      setNewTodo("");
+  // Função para carregar as tarefas do localStorage
+  const loadTodosFromLocalStorage = () => {
+    const storedTodos = JSON.parse(localStorage.getItem("todos"));
+    if (storedTodos) {
+      setTodos(storedTodos);
     }
   };
 
-  const deleteTodo = (index) => {
-    const updatedTodos = [...todos];
-    updatedTodos.splice(index, 1);
-    setTodos(updatedTodos);
+  // Função para salvar as tarefas no localStorage
+  const saveTodosToLocalStorage = (updatedTodos) => {
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   };
 
-  const startEditing = (index) => {
-    setEditIndex(index);
-    setEditedTodo(todos[index]);
+  useEffect(() => {
+    loadTodosFromLocalStorage(); // Carrega as tarefas ao iniciar
+  }, []);
+
+  // Função para adicionar uma tarefa
+  const addTodo = () => {
+    if (!newTodo) return;
+    const newTask = {
+      id: Date.now(),
+      task: newTodo,
+    };
+    const updatedTodos = [...todos, newTask];
+    setTodos(updatedTodos);
+    saveTodosToLocalStorage(updatedTodos);
+    setNewTodo(""); // Limpar campo de input
   };
 
-  const saveTodo = (index) => {
-    const updatedTodos = [...todos];
-    updatedTodos[index] = editedTodo;
+  // Função para editar uma tarefa
+  const editTodo = (id, novaTarefa) => {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, task: novaTarefa } : todo
+    );
     setTodos(updatedTodos);
-    setEditIndex(null);
-    setEditedTodo("");
+    saveTodosToLocalStorage(updatedTodos);
+    setEditingTodo(null); // Limpa o campo de edição
+  };
+
+  // Função para excluir uma tarefa
+  const deleteTodo = (id) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+    saveTodosToLocalStorage(updatedTodos);
   };
 
   return (
-    <div className="todo-container">
-      <h1>Lista de Tarefas</h1>
+    <div>
+      <h1>Todo For You<span>.</span></h1>
 
-      <div className="input-group">
-        <input
-          type="text"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Digite uma nova tarefa"
-        />
-        <button onClick={addTodo}>Adicionar</button>
-      </div>
+      {/* Formulário para adicionar tarefa */}
+      <input
+        type="text"
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
+        placeholder="Adicione uma nova tarefa"
+      />
+      <button onClick={addTodo}>Add</button>
 
       <ul>
-        {todos.map((todo, index) => (
-          <li key={index}>
-            {editIndex === index ? (
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            {editingTodo === todo.id ? (
               <>
                 <input
                   type="text"
-                  value={editedTodo}
-                  onChange={(e) => setEditedTodo(e.target.value)}
+                  defaultValue={todo.task}
+                  onChange={(e) =>
+                    setEditingTodo({ ...editingTodo, task: e.target.value })
+                  }
                 />
-                <button onClick={() => saveTodo(index)}>Salvar</button>
+                <button onClick={() => editTodo(todo.id, editingTodo.task)}>
+                  Salvar
+                </button>
               </>
             ) : (
               <>
-                <span>{todo}</span>
-                <div>
-                  <button onClick={() => startEditing(index)}>Editar</button>
-                  <button onClick={() => deleteTodo(index)}>Excluir</button>
-                </div>
+                <span>{todo.task}</span>
+                <button onClick={() => setEditingTodo(todo.id)}>Editar</button>
+                <button onClick={() => deleteTodo(todo.id)}>Excluir</button>
               </>
             )}
           </li>
@@ -73,6 +93,6 @@ function TodoList() {
       </ul>
     </div>
   );
-}
+};
 
 export default TodoList;

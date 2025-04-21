@@ -3,13 +3,22 @@ body {
     margin: 0;
     height: 100vh;
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #0d0c0c;
+    color: white;
 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+h1 span {
+    color:#007bff
+}
 .app-wrapper {
     display: flex;
     justify-content: center;
@@ -34,11 +43,12 @@ body {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
-}
+} 
 
 input[type="text"] {
     flex: 1;
-    padding: 10px;
+    padding: 9px;
+    margin-right: 1rem;
     font-size: 16px;
     border-radius: 6px;
 }
@@ -57,14 +67,15 @@ button:hover {
 }
 
 ul {
+    margin-top: 1rem;
     list-style: none;
     padding: 0;
 }
 
 li {
-    background: #eee;
-    padding: 12px;
-    margin-bottom: 10px;
+    background: #272424;
+    padding: 10px;
+    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
